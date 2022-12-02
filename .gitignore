@@ -1,2 +1,4 @@
 # Project exclude paths
 /out/
+/adventofcode2022.iml
+/.idea
