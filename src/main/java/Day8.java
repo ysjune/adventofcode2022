@@ -84,11 +84,86 @@ public class Day8 {
         return up || down || right || left;
     }
 
+    public static long highestScenicScore(String path) {
+
+        List<List<Integer>> lists = new ArrayList<>();
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
+            String readLine = null;
+            while ((readLine = bufferedReader.readLine()) != null) {
+                ArrayList<Integer> arrayList = new ArrayList<>();
+                for (int i = 0; i < readLine.length(); i++) {
+                    arrayList.add(Integer.parseInt(String.valueOf(readLine.charAt(i))));
+                }
+                lists.add(arrayList);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        long score = 0;
+        for (int i = 0; i < lists.size(); i++) {
+            for (int j = 0; j < lists.get(i).size(); j++) {
+                Integer integer = lists.get(i).get(j);
+                score = Math.max(score, findScore(lists, integer, i, j));
+            }
+        }
+
+        return score;
+    }
+
+    public static long findScore(List<List<Integer>> lists, int integer, int i, int j) {
+
+        int height = lists.size(); // i
+        int width = lists.get(0).size(); // j
+
+        long upCount = 0;
+        long downCount = 0;
+        long rightCount = 0;
+        long leftCount = 0;
+
+        for (int k = i+1; k < height; k++) {
+            upCount++;
+            Integer temp = lists.get(k).get(j);
+            if(temp >= integer) {
+                break;
+            }
+        }
+
+        for (int k = i-1; k >= 0; k--) {
+            downCount++;
+            Integer temp = lists.get(k).get(j);
+            if(temp >= integer) {
+                break;
+            }
+        }
+
+        for (int k = j+1; k < width; k++) {
+            rightCount++;
+            Integer temp = lists.get(i).get(k);
+            if(temp >= integer) {
+                break;
+            }
+        }
+
+        for (int k = j-1; k >= 0; k--) {
+            leftCount++;
+            Integer temp = lists.get(i).get(k);
+            if(temp >= integer) {
+                break;
+            }
+        }
+
+        return upCount * downCount * rightCount * leftCount;
+    }
 
     public static void main(String[] args) {
 
-        long total = seeTree("src/main/resources/day8");
-        System.out.println(total);
+//        long total = seeTree("src/main/resources/day8");
+//        System.out.println(total);
+
+        long score = highestScenicScore("src/main/resources/day8");
+        System.out.println(score);
 
     }
 }
